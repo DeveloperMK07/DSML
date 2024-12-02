@@ -1,0 +1,51 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+
+# Load a dataset (replace this with any dataset of your choice)
+# Example: iris_df = pd.read_csv('your_dataset.csv')
+# For demonstration, we'll create a sample DataFrame
+data = pd.DataFrame({
+    'feature1': np.random.rand(100),
+    'feature2': np.random.rand(100),
+    'feature3': np.random.rand(100),
+    'feature4': np.random.rand(100),
+    'category': np.random.choice(['A', 'B', 'C'], 100)
+})
+
+# Add some intentional data issues for demonstration
+# Introduce missing values in a random column
+data.loc[0:10, 'feature1'] = np.nan
+
+# Introduce some duplicates
+data = data.append(data.iloc[0:5], ignore_index=True)
+
+# 1. Data Cleaning
+
+# Handle missing values by filling with the column mean (for numerical columns)
+data['feature1'].fillna(data['feature1'].mean(), inplace=True)
+
+# Remove duplicate rows
+data.drop_duplicates(inplace=True)
+
+# Check for missing values
+missing_values = data.isnull().sum()
+print("Missing values after cleaning:")
+print(missing_values)
+
+# 2. Data Transformation
+
+# Convert categorical columns to numerical if necessary (e.g., encoding a 'category' column)
+# Label encoding for categorical columns
+if 'category' in data.columns:
+    label_encoder = LabelEncoder()
+    data['category'] = label_encoder.fit_transform(data['category'])
+
+# Normalize the numerical data using StandardScaler
+numerical_columns = data.select_dtypes(include=[np.number]).columns
+scaler = StandardScaler()
+data[numerical_columns] = scaler.fit_transform(data[numerical_columns])
+
+# Display the transformed data
+print("\nData after cleaning and transformation:")
+print(data.head())
