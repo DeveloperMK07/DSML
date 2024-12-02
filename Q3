@@ -1,0 +1,34 @@
+# Import necessary libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the House_Price Prediction dataset
+house_price_data = pd.read_csv('house_price.csv')  # Replace with the correct dataset path
+
+print("House Price Data Loaded Successfully!")
+
+# Replace 'Column_Name' with numerical columns from the dataset for computation
+columns = ['Column1', 'Column2', 'Column3']  # Replace with actual column names from the dataset
+
+for column in columns:
+    # Compute standard deviation
+    std_dev = house_price_data[column].std()
+    print(f"Standard Deviation of {column}: {std_dev}")
+
+    # Compute variance
+    variance = house_price_data[column].var()
+    print(f"Variance of {column}: {variance}")
+
+    # Compute percentiles
+    percentiles = house_price_data[column].quantile([0.25, 0.5, 0.75])
+    print(f"Percentiles of {column}:\n{percentiles}")
+
+# Create histograms for each feature
+for column in columns:
+    plt.figure(figsize=(6, 4))
+    plt.hist(house_price_data[column], bins=20, color='skyblue', edgecolor='black')
+    plt.title(f"Histogram of {column}")
+    plt.xlabel(column)
+    plt.ylabel("Frequency")
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.show()
