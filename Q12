@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset
+iris = load_iris()
+iris_df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+# Add the target column to the dataframe for easier identification
+iris_df['species'] = iris.target
+
+# 1. Create a box plot for each feature
+plt.figure(figsize=(12, 8))
+features = iris_df.columns[:-1]  # Exclude the target 'species' column for box plots
+
+for i, feature in enumerate(features, 1):
+    plt.subplot(2, 2, i)
+    iris_df.boxplot(column=feature, patch_artist=True)
+    plt.title(f"Box Plot of {feature}")
+    plt.ylabel(feature)
+
+plt.tight_layout()
+plt.show()
+
+# 2. Identify and discuss distributions and outliers
+# The box plot will visually display:
+# - The median (line inside the box)
+# - The interquartile range (IQR) (box size)
+# - Outliers (points outside the whiskers)
