@@ -1,0 +1,37 @@
+import numpy as np
+import pandas as pd
+
+# Load the dataset from CSV file
+iris_df = pd.read_csv('path_to_your_file.csv')  # Replace with your file path
+
+# Assuming the CSV has columns similar to the Iris dataset, e.g., 'sepal length (cm)', 'species', etc.
+# If you want to create an 'Age' column for demonstration as per your earlier example:
+age_bins = ['<21', '21-35', '>35']
+iris_df['Age'] = pd.cut(iris_df['sepal length (cm)'], bins=[0, 5, 7, 10], labels=age_bins)
+
+# 1. Create the frequency table for the 'Age' attribute
+age_freq_table = iris_df['Age'].value_counts(normalize=True)
+print("Frequency Table for 'Age':")
+print(age_freq_table)
+
+# 2. Calculate the entropy for the parent (entire dataset)
+def entropy(subset):
+    # Calculate the proportion of each class in the subset and use the entropy formula
+    class_probs = subset.value_counts(normalize=True)
+    return -np.sum(class_probs * np.log2(class_probs))
+
+# Parent entropy (entropy for the whole dataset)
+parent_entropy = entropy(iris_df['species'])
+print(f"\nParent Entropy: {parent_entropy:.4f}")
+
+# 3. Calculate the entropy for each subset (split by 'Age')
+# Subset the dataset by 'Age' and calculate entropy for each
+weighted_entropy = 0
+for age_group in age_freq_table.index:
+    subset = iris_df[iris_df['Age'] == age_group]['species']
+    group_entropy = entropy(subset)
+    weighted_entropy += age_freq_table[age_group] * group_entropy
+
+# 4. Calculate the Information Gain
+information_gain = parent_entropy - weighted_entropy
+print(f"\nInformation Gain from splitting by 'Age': {information_gain:.4f}")
