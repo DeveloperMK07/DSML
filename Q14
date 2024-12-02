@@ -1,0 +1,24 @@
+import pandas as pd
+
+# Load the dataset
+covid_vaccine_data = pd.read_csv('covid_vaccine_statewise.csv')  # Replace with the correct path
+
+# 1. Describe the dataset
+print("Dataset Description:")
+print(covid_vaccine_data.describe())
+
+# Checking the first few rows to understand the structure
+print("\nFirst 5 rows of the dataset:")
+print(covid_vaccine_data.head())
+
+# 2. Number of males vaccinated
+# Assuming column names 'male_vaccinated' for male vaccination count
+# If the column name is different, replace it with the actual column name
+statewise_males_vaccinated = covid_vaccine_data['male_vaccinated'].sum()
+print(f"\nTotal number of males vaccinated in India: {statewise_males_vaccinated}")
+
+# 3. Number of females vaccinated
+# Assuming column names 'female_vaccinated' for female vaccination count
+# If the column name is different, replace it with the actual column name
+statewise_females_vaccinated = covid_vaccine_data['female_vaccinated'].sum()
+print(f"Total number of females vaccinated in India: {statewise_females_vaccinated}")
