@@ -1,0 +1,16 @@
+import pandas as pd
+
+# Load the dataset
+# Replace 'house_price.csv' with the path to your dataset
+df = pd.read_csv('house_price.csv')
+
+# Example: Categorical variable - Neighborhood, Quantitative variable - SalePrice
+grouped_stats = df.groupby('Neighborhood')['SalePrice'].agg(
+    Mean='mean',
+    Median='median',
+    Min='min',
+    Max='max',
+    StdDev='std'
+)
+
+print(grouped_stats)
