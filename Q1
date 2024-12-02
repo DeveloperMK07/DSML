@@ -1,0 +1,20 @@
+import pandas as pd
+
+file=pd.read_csv("Titanic.csv")
+
+print(file.head(6))
+
+select_data=file.loc[:5,['Sex']]
+print(select_data)
+
+sort_data=file.sort_values(by='PassengerId',ascending=False)
+print(sort_data)
+
+dec=file.describe
+print(dec)
+
+dtp=file.dtypes
+print(dtp)
+
+sh=file.shape
+print(sh)
