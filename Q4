@@ -1,0 +1,56 @@
+import math
+
+# Dataset
+data = [
+    {'Age': '<21', 'Income': 'High', 'Gender': 'Male', 'Marital Status': 'Single', 'Buys': 'No'},
+    {'Age': '<21', 'Income': 'High', 'Gender': 'Male', 'Marital Status': 'Married', 'Buys': 'No'},
+    {'Age': '21–35', 'Income': 'High', 'Gender': 'Male', 'Marital Status': 'Single', 'Buys': 'Yes'},
+    {'Age': '>35', 'Income': 'Medium', 'Gender': 'Male', 'Marital Status': 'Single', 'Buys': 'Yes'},
+    {'Age': '>35', 'Income': 'Low', 'Gender': 'Female', 'Marital Status': 'Married', 'Buys': 'Yes'},
+    {'Age': '>35', 'Income': 'Low', 'Gender': 'Female', 'Marital Status': 'Single', 'Buys': 'No'},
+    {'Age': '21–35', 'Income': 'Low', 'Gender': 'Female', 'Marital Status': 'Single', 'Buys': 'Yes'},
+    {'Age': '<21', 'Income': 'Medium', 'Gender': 'Male', 'Marital Status': 'Single', 'Buys': 'No'},
+    {'Age': '<21', 'Income': 'Low', 'Gender': 'Female', 'Marital Status': 'Married', 'Buys': 'Yes'},
+    {'Age': '>35', 'Income': 'Medium', 'Gender': 'Female', 'Marital Status': 'Married', 'Buys': 'Yes'},
+    {'Age': '<21', 'Income': 'Medium', 'Gender': 'Female', 'Marital Status': 'Married', 'Buys': 'Yes'},
+    {'Age': '21–35', 'Income': 'Medium', 'Gender': 'Male', 'Marital Status': 'Married', 'Buys': 'Yes'},
+]
+
+# Function to calculate entropy
+def calculate_entropy(data, target_attribute):
+    target_values = [row[target_attribute] for row in data]
+    value_counts = {value: target_values.count(value) for value in set(target_values)}
+    total = len(data)
+    entropy = sum(
+        -(count / total) * math.log2(count / total)
+        for count in value_counts.values()
+    )
+    return entropy
+
+# Function to calculate information gain
+def calculate_information_gain(data, split_attribute, target_attribute):
+    total_entropy = calculate_entropy(data, target_attribute)
+    split_values = set(row[split_attribute] for row in data)
+    weighted_entropy = 0
+    total = len(data)
+
+    for value in split_values:
+        subset = [row for row in data if row[split_attribute] == value]
+        weighted_entropy += (len(subset) / total) * calculate_entropy(subset, target_attribute)
+
+    information_gain = total_entropy - weighted_entropy
+    return information_gain
+
+# Calculate entropy of the whole dataset
+target_attribute = 'Buys'
+initial_entropy = calculate_entropy(data, target_attribute)
+print(f"Initial Entropy: {initial_entropy}")
+
+# Calculate information gain for each attribute
+attributes = ['Age', 'Income', 'Gender', 'Marital Status']
+gains = {attribute: calculate_information_gain(data, attribute, target_attribute) for attribute in attributes}
+
+# Find the attribute with the highest information gain
+root_node = max(gains, key=gains.get)
+print(f"Information Gain for each attribute: {gains}")
+print(f"Root Node: {root_node}")
