@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset for demonstration
+iris = load_iris()
+iris_df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+# Add a column with some missing values for demonstration purposes
+iris_df['missing_column'] = np.random.choice([1, 2, 3, np.nan], size=iris_df.shape[0])
+
+# 1. Count unique values of data
+unique_values = iris_df.nunique()
+print("Unique values in each column:")
+print(unique_values)
+
+# 2. Identify the format (data types) of each column
+data_types = iris_df.dtypes
+print("\nData types of each column:")
+print(data_types)
+
+# 3. Convert variable data types
+# Example: Convert 'sepal length (cm)' to string type
+iris_df['sepal length (cm)'] = iris_df['sepal length (cm)'].astype(str)
+print("\nData types after conversion:")
+print(iris_df.dtypes)
+
+# 4. Identify missing values and fill in the missing values
+missing_values = iris_df.isnull().sum()
+print("\nMissing values in each column:")
+print(missing_values)
+
+# Fill missing values with the median of the column
+iris_df['missing_column'] = iris_df['missing_column'].fillna(iris_df['missing_column'].median())
+print("\nAfter filling missing values:")
+print(iris_df['missing_column'].head())
