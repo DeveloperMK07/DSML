@@ -1,0 +1,34 @@
+import pandas as pd
+
+# Load the dataset from a CSV file
+file_path = 'path_to_your_file.csv'  # Replace with the actual file path
+iris_df = pd.read_csv(file_path)
+
+# Check the structure of the dataset
+print("Dataset Preview:")
+print(iris_df.head())
+
+# If species are encoded numerically (e.g., 0, 1, 2), map them to species names
+species_names = {0: 'Iris-setosa', 1: 'Iris-versicolor', 2: 'Iris-virginica'}
+if iris_df['species'].dtype != 'object':  # Check if the column is numerical
+    iris_df['species'] = iris_df['species'].map(species_names)
+
+# 1. Calculate basic statistics for each species
+
+# Function to calculate and display basic statistics
+def display_stats(species_data, species_name):
+    print(f"\nStatistics for {species_name}:")
+    print(f"Mean:\n{species_data.mean()}")
+    print(f"Standard Deviation:\n{species_data.std()}")
+    print(f"Percentiles (25th, 50th, 75th):\n{species_data.quantile([0.25, 0.50, 0.75])}")
+    print()
+
+# Filter the data for each species
+setosa_data = iris_df[iris_df['species'] == 'Iris-setosa'].drop('species', axis=1)
+versicolor_data = iris_df[iris_df['species'] == 'Iris-versicolor'].drop('species', axis=1)
+virginica_data = iris_df[iris_df['species'] == 'Iris-virginica'].drop('species', axis=1)
+
+# Display statistics for each species
+display_stats(setosa_data, 'Iris-setosa')
+display_stats(versicolor_data, 'Iris-versicolor')
+display_stats(virginica_data, 'Iris-virginica')
