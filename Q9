@@ -1,0 +1,82 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Data points
+points = np.array([[0.1, 0.6], [0.15, 0.71], [0.08, 0.9], [0.16, 0.85],
+                   [0.2, 0.3], [0.25, 0.5], [0.24, 0.1], [0.3, 0.2]])
+
+# Initial centroids (m1, m2)
+centroid_1 = np.array([0.1, 0.6])  # m1 = P1
+centroid_2 = np.array([0.3, 0.2])  # m2 = P8
+
+# Maximum iterations
+iterations = 10
+
+# Function to compute the Euclidean distance between two points
+def euclidean_distance(point, centroid):
+    return np.linalg.norm(point - centroid)
+
+# Function to assign points to the nearest centroid
+def assign_clusters(points, centroid_1, centroid_2):
+    cluster_1 = []
+    cluster_2 = []
+    
+    for point in points:
+        dist_1 = euclidean_distance(point, centroid_1)
+        dist_2 = euclidean_distance(point, centroid_2)
+        
+        if dist_1 < dist_2:
+            cluster_1.append(point)
+        else:
+            cluster_2.append(point)
+    
+    return np.array(cluster_1), np.array(cluster_2)
+
+# Function to compute the new centroids
+def compute_centroid(cluster):
+    return np.mean(cluster, axis=0)
+
+# K-means clustering loop
+for i in range(iterations):
+    # Assign points to the nearest centroid
+    cluster_1, cluster_2 = assign_clusters(points, centroid_1, centroid_2)
+    
+    # Compute new centroids
+    new_centroid_1 = compute_centroid(cluster_1)
+    new_centroid_2 = compute_centroid(cluster_2)
+    
+    # Check for convergence
+    if np.allclose(centroid_1, new_centroid_1) and np.allclose(centroid_2, new_centroid_2):
+        break
+    
+    # Update centroids for the next iteration
+    centroid_1 = new_centroid_1
+    centroid_2 = new_centroid_2
+
+# Answer the questions:
+# 1. Which cluster does P6 belong to?
+p6 = np.array([0.25, 0.5])
+dist_1 = euclidean_distance(p6, centroid_1)
+dist_2 = euclidean_distance(p6, centroid_2)
+cluster_6 = "Cluster 1" if dist_1 < dist_2 else "Cluster 2"
+
+# 2. Population of cluster around m2
+cluster_2_population = len(cluster_2)
+
+# 3. Updated values of m1 and m2
+updated_centroid_1 = centroid_1
+updated_centroid_2 = centroid_2
+
+print(f"1. P6 belongs to: {cluster_6}")
+print(f"2. Population of Cluster around m2: {cluster_2_population}")
+print(f"3. Updated centroid m1: {updated_centroid_1}")
+print(f"Updated centroid m2: {updated_centroid_2}")
+
+# Optional: Plot the points and clusters
+plt.scatter(points[:, 0], points[:, 1], c=['red' if euclidean_distance(p, centroid_1) < euclidean_distance(p, centroid_2) else 'blue' for p in points])
+plt.scatter([centroid_1[0], centroid_2[0]], [centroid_1[1], centroid_2[1]], c='black', marker='x', s=100, label='Centroids')
+plt.title('K-means Clustering')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.legend()
+plt.show()
