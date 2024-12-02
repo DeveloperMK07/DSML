@@ -1,0 +1,37 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset
+iris = load_iris()
+iris_df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+# Add the target column to the dataframe for easier identification
+iris_df['species'] = iris.target
+
+# 1. List down the features and their types
+feature_types = {
+    'sepal length (cm)': 'numeric',
+    'sepal width (cm)': 'numeric',
+    'petal length (cm)': 'numeric',
+    'petal width (cm)': 'numeric',
+    'species': 'nominal'  # Target variable (categorical)
+}
+
+print("Features and Their Types:")
+for feature, feature_type in feature_types.items():
+    print(f"{feature}: {feature_type}")
+
+# 2. Create a histogram for each feature
+features = iris_df.columns[:-1]  # Exclude the target 'species' column for histograms
+
+plt.figure(figsize=(12, 8))
+for i, feature in enumerate(features, 1):
+    plt.subplot(2, 2, i)
+    iris_df[feature].hist(bins=20, color='skyblue', edgecolor='black')
+    plt.title(f"Histogram of {feature}")
+    plt.xlabel(feature)
+    plt.ylabel('Frequency')
+
+plt.tight_layout()
+plt.show()
