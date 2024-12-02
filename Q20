@@ -1,0 +1,63 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.datasets import load_iris
+
+# Step 1: Load your CSV data
+df = pd.read_csv('your_file.csv')  # Replace with the correct path to your CSV file
+
+# Assume that the CSV contains the same columns as the Iris dataset
+# Extract features (modify column names as needed based on your CSV)
+X = df[['sepal_length', 'sepal_width', 'petal_length', 'petal_width']].values
+
+# Number of clusters (K=3)
+K = 3
+iterations = 10
+
+# Step 2: Randomly initialize the centroids by selecting random data points
+np.random.seed(42)  # For reproducibility
+initial_centroids_idx = np.random.choice(X.shape[0], K, replace=False)  # Select K random points as initial centroids
+centroids = X[initial_centroids_idx]
+
+# Function to compute the Euclidean distance
+def euclidean_distance(point, centroid):
+    return np.linalg.norm(point - centroid)
+
+# K-means clustering loop
+for i in range(iterations):
+    # Step 3: Assign each point to the nearest centroid
+    labels = []
+    for point in X:
+        distances = [euclidean_distance(point, centroid) for centroid in centroids]
+        labels.append(np.argmin(distances))  # Assign to the closest centroid
+    
+    # Step 4: Recompute the centroids
+    new_centroids = []
+    for j in range(K):
+        cluster_points = X[np.array(labels) == j]  # Get all points assigned to cluster j
+        new_centroid = np.mean(cluster_points, axis=0)  # Compute the new centroid as the mean
+        new_centroids.append(new_centroid)
+    
+    # Step 5: Check for convergence (if centroids do not change, we can break early)
+    new_centroids = np.array(new_centroids)
+    if np.allclose(centroids, new_centroids):
+        print(f"Converged in {i+1} iterations.")
+        break
+    centroids = new_centroids
+
+# Print the final cluster means (centroids)
+print("\nFinal cluster means (centroids) after clustering:")
+print(centroids)
+
+# Optional: Plot the clusters and centroids
+plt.figure(figsize=(8, 6))
+for i in range(K):
+    cluster_points = X[np.array(labels) == i]
+    plt.scatter(cluster_points[:, 0], cluster_points[:, 1], label=f"Cluster {i+1}", alpha=0.5)
+    
+plt.scatter(centroids[:, 0], centroids[:, 1], color='red', marker='X', s=200, label='Centroids')
+plt.title('K-means Clustering (K=3)')
+plt.xlabel('Sepal Length')
+plt.ylabel('Sepal Width')
+plt.legend()
+plt.show()
