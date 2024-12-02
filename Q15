@@ -1,0 +1,49 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load the Titanic dataset
+titanic_data = sns.load_dataset('titanic')
+
+# 1. Display the first few rows of the dataset to understand its structure
+print("First 5 rows of the Titanic dataset:")
+print(titanic_data.head())
+
+# 2. Check for missing values and overall structure
+print("\nMissing values in the dataset:")
+print(titanic_data.isnull().sum())
+
+# 3. Use Seaborn to create visualizations and explore patterns
+
+# Survival rate based on class
+plt.figure(figsize=(8, 6))
+sns.countplot(data=titanic_data, x='class', hue='survived', palette='muted')
+plt.title('Survival Rate Based on Class')
+plt.xlabel('Class')
+plt.ylabel('Count')
+plt.show()
+
+# Survival rate based on sex
+plt.figure(figsize=(8, 6))
+sns.countplot(data=titanic_data, x='sex', hue='survived', palette='muted')
+plt.title('Survival Rate Based on Sex')
+plt.xlabel('Sex')
+plt.ylabel('Count')
+plt.show()
+
+# Survival rate based on age (age distribution of survivors and non-survivors)
+plt.figure(figsize=(8, 6))
+sns.histplot(data=titanic_data, x='age', hue='survived', multiple='stack', kde=True)
+plt.title('Age Distribution of Survivors and Non-Survivors')
+plt.xlabel('Age')
+plt.ylabel('Count')
+plt.show()
+
+# Pair plot to explore relationships between numeric features (Age, Fare, etc.)
+sns.pairplot(titanic_data, hue='survived', palette='muted', diag_kind='kde')
+plt.show()
+
+# Heatmap to check correlations between numeric features
+plt.figure(figsize=(8, 6))
+sns.heatmap(titanic_data.corr(), annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Heatmap')
+plt.show()
