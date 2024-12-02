@@ -1,0 +1,15 @@
+import pandas as pd
+
+file=pd.read_csv('Telecom Churn.csv')
+
+print("min of total night calls",file['total night calls'].min())
+print("max of total night calls",file['total night calls'].max())
+print("mean of total night calls",round(file['total night calls'].mean(),2))
+print("std of total night calls",round(file['total night calls'].std(),2))
+print("var of total night calls",round(file['total night calls'].var(),2))
+
+range=file['total night calls'].max()-file['total night calls'].min()
+print(range)
+
+f1=file['total night calls'].quantile([0.25,0.50,0.75])
+print(f1)
