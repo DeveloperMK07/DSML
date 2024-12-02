@@ -1,0 +1,28 @@
+import pandas as pd
+
+# Load the dataset
+covid_vaccine_data = pd.read_csv('covid_vaccine_statewise.csv')  # Replace with the correct path
+
+# 1. Describe the dataset
+print("Dataset Description:")
+print(covid_vaccine_data.describe())
+
+# Checking the first few rows to understand the structure
+print("\nFirst 5 rows of the dataset:")
+print(covid_vaccine_data.head())
+
+# 2. Number of persons vaccinated for the first dose, state-wise
+# Assuming the column names are 'state', 'first_dose' for first dose vaccination
+# If they are different, replace them with the actual column names
+
+statewise_first_dose = covid_vaccine_data.groupby('state')['first_dose'].sum()
+print("\nNumber of persons vaccinated for the first dose (state-wise):")
+print(statewise_first_dose)
+
+# 3. Number of persons vaccinated for the second dose, state-wise
+# Assuming the column names are 'second_dose' for second dose vaccination
+# If they are different, replace them with the actual column names
+
+statewise_second_dose = covid_vaccine_data.groupby('state')['second_dose'].sum()
+print("\nNumber of persons vaccinated for the second dose (state-wise):")
+print(statewise_second_dose)
